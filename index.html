@@ -2,37 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snakes</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 </head>
 <body>
-  <!-- INICIO -->
-    <div id="pantalla-inicio">
-      <button>START</button>
-      <div class="instrucciones"></div> 
-    </div>
-
-  <!-- TABLERO -->
-    <div id="pantalla-juego">
-        <div class="tiempo"></div>
-        <div class="detalles-juego">
-          <div class="puntos">Player One: 00</div>
-          <div class="puntos">Player Two: 00</div>
+    <div class="wrapper">
+        <div class="game-details">
+          <div class="score">Score: 00</div>
+          
         </div>
-        <div class="tablero">
+        <div class="play-board">
         </div>    
       </div>
-      <script src="js/game.js"></script>
-
-  <!-- GAME OVER -->
-  <div id="pantalla-fin">
-    <button>GAME OVER</button>
-  </div>
-  
-  <script src="js/game.js"></script>
-  <script src="js/players.js"></script>
-  <script src="js/elements.js"></script>
-
+      <script src="script.js"></script>
 </body>
 </html>
+
+

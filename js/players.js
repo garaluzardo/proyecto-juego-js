@@ -1,3 +1,0 @@
-class PlayerOne {}
-
-class PlayerTwo {}
