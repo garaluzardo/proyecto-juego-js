@@ -11,9 +11,8 @@ body {
     justify-content: center;
     min-height: 100vh;
     /*background: beige;*/
-    background-image: url(../img/fondo.gif);
+    background-image: url(img/elementos/fondo.gif);
     background-size: cover;
-
 }
 
 .wrapper {
