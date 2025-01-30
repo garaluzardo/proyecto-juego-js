@@ -15,7 +15,45 @@ body {
     background-size: cover;
 }
 
-.wrapper {
+#start-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    .menu {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        width: 500px;
+        height: 200px;
+        gap: 30px;
+        align-items: center;
+        padding-left: 20px;
+    }
+
+    .singleplayer-button {
+        background: url('/images/1-player.png');
+        background-size: cover;
+        padding: 10px;
+        border: none;
+        height: 100px;
+        width: 400px;
+        cursor: pointer;
+    }
+
+    .multiplayer-button {
+        background: url('/images/2-players.png');
+        background-size: cover;
+        padding: 10px;
+        border: none;
+        height: 100px;
+        width: 460px;
+        cursor: pointer;
+    }
+
+
+#wrapper {
     width: 65vmin;
     height: 70vmin;
     display: flex;

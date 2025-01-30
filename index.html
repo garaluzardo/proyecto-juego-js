@@ -8,7 +8,16 @@
 </head>
 <body>
 
-  <div class="wrapper">
+  <div id="start-screen" class="screen">
+    <img class="title" src="/images/title.gif" alt="Título animado de 'Snakes'">
+    <div id="menu" class="menu">
+      <button class="singleplayer-button"></button>
+      <button class="multiplayer-button"></button>
+    </div>
+  </div>
+
+
+  <div id="wrapper" class="screen">
       <div class="game-details">
         <div class="score-player1">Score: 00</div>
         <div class="score-player2">Score: 00</div>
@@ -16,6 +25,11 @@
       </div>
       <div class="play-board">
       </div>    
+    </div>
+
+    <div id="gameover-screen" class="screen">
+      <p></p>
+      <button>RESTART</button>
     </div>
 
     <script src="js/script.js"></script>
