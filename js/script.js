@@ -10,11 +10,11 @@ class Snake {
     }
 
     updatePosition(foods) {
-        // Verificar si la cabeza de la serpiente ha comido alguna comida
+        // Verificamos si la cabeza de la serpiente ha comido alguna comida
         const foodIndex = foods.findIndex(food => food.x === this.x && food.y === this.y);
         
         if (foodIndex !== -1) {
-            // Si la serpiente ha comido la comida, eliminamos la comida del arreglo
+            // Si la serpiente ha comido la comida, eliminamos la comida del array
             foods.splice(foodIndex, 1);
             this.body.push([this.x, this.y]);
             this.score++;
@@ -59,13 +59,15 @@ const scorePlayer1Element = document.querySelector(".score-player1");
 const scorePlayer2Element = document.querySelector(".score-player2");
 
 let gameOver = false;
-let foods = [];  // Lista de comidas
+let foods = []; 
 const snake1 = new Snake(4, 15, "player1");
 const snake2 = new Snake(26, 15, "player2");
 let setIntervalId;
 
 let countdownTime = 120; // Inicializamos el temporizador
 const timerElement = document.querySelector(".timer"); 
+
+let timerStarted = false; // Indicador para saber si el temporizador ha comenzado
 
 const generateFood = () => {
     const foodX = Math.floor(Math.random() * 30) + 1;
@@ -77,7 +79,7 @@ const changeFoodPosition = () => {
     // Siempre habrá 3 piezas de comida
     while (foods.length < 3) {
         const newFood = generateFood();
-        // Evitar que la comida aparezca donde están las serpientes
+        // Evitaque la comida aparezca donde están las serpientes
         const isFoodOnSnake = snake1.body.some(segment => segment[0] === newFood.x && segment[1] === newFood.y) || 
                               snake2.body.some(segment => segment[0] === newFood.x && segment[1] === newFood.y);
         if (!isFoodOnSnake) {
@@ -140,7 +142,7 @@ const initGame = () => {
         htmlMarkup += `<div class="food" style="grid-area: ${food.y} / ${food.x}"></div>`;
     });
 
-    // Verificar si las serpientes comieron alguna comida y cambiar su posición
+    // Verificamos si las serpientes comieron alguna comida y cambiamos su posición
     if (snake1.updatePosition(foods)) {
         changeFoodPosition(); 
     }
@@ -162,16 +164,37 @@ const initGame = () => {
 
     playBoard.innerHTML = htmlMarkup;
 
-    // Actualizar los puntajes por separado
+    // Puntos de cada jugador por separado
     scorePlayer1Element.innerHTML = `Player 1: ${snake1.score}`;
     scorePlayer2Element.innerHTML = `Player 2: ${snake2.score}`;
 };
 
+const startTimer = () => {
+    // Comenzar el temporizador solo cuando hacemos clic en multi
+    if (!timerStarted) {
+        timerElement.innerHTML = `⏱️ ${countdownTime}s`;  // Muestra valor iniciaL
+        setIntervalId = setInterval(updateTimer, 1000); 
+        timerStarted = true; // Temp iniciado
+    }
+};
 
-setInterval(updateTimer, 1000); // Temporizador actualizado cada segundo
+// Inicio del juego en multiplayer
+const multiplayerButton = document.querySelector(".multiplayer-button");
+const pantallaInicio = document.getElementById("pantalla-inicio");
+const wrapper = document.querySelector(".wrapper");
 
-// Iniciar el juego con el intervalo original (cada 125 ms para movimiento)
-setIntervalId = setInterval(initGame, 125);
+multiplayerButton.addEventListener("click", () => {
+    
+    pantallaInicio.style.display = "none";
+    wrapper.classList.remove("hidden");
+
+    // Inicio temporizador
+    startTimer();
+
+   
+});
+
+setInterval(initGame, 125);
 
 changeFoodPosition();
 
