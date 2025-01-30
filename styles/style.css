@@ -11,7 +11,7 @@ body {
     justify-content: center;
     min-height: 100vh;
     /*background: beige;*/
-    background-image: url('/images/fondo.gif');
+    background-image: url('/proyecto-juego-js/images/fondo.gif');
     background-size: cover;
 }
 
@@ -33,7 +33,7 @@ body {
     }
 
     .singleplayer-button {
-        background: url(/images/1-player.png);
+        background: url('/proyecto-juego-js/images/1-player.png');
         background-size: cover;
         padding: 10px;
         border: none;
@@ -43,7 +43,7 @@ body {
     }
 
     .multiplayer-button {
-        background: url(/images/2-players.png);
+        background: url('/proyecto-juego-js/images/2-players.png');
         background-size: cover;
         padding: 10px;
         border: none;
@@ -124,7 +124,7 @@ body {
 }
 
 .play-board .food {
-    background-image: url('/images/hamster.png');
+    background-image: url('/proyecto-juego-js/images/hamster.png');
     background-size: cover;
     width: 100%;
     height: 100%;
