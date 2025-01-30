@@ -9,10 +9,11 @@ class Snake {
         this.colorClass = colorClass;
     }
 
+    //Actualiza la posición de la serpiente y comprueba si ha comido
     updatePosition(foods) {
-        // Verificar si la cabeza de la serpiente ha comido alguna comida
+
         const foodIndex = foods.findIndex(food => food.x === this.x && food.y === this.y);
-        
+
         if (foodIndex !== -1) {
             // Si la serpiente ha comido la comida, eliminamos la comida del arreglo
             foods.splice(foodIndex, 1);
@@ -21,6 +22,7 @@ class Snake {
             return true;
         }
 
+        // Desplazamiento del cuerpo de la serpiente
         for (let i = this.body.length - 1; i > 0; i--) {
             this.body[i] = this.body[i - 1];
         }
@@ -31,6 +33,7 @@ class Snake {
         return false;
     }
 
+    // Verifica si la serpiente colisiona consigo misma
     isCollidingWithSelf() {
         for (let i = 1; i < this.body.length; i++) {
             if (this.body[0][0] === this.body[i][0] && this.body[0][1] === this.body[i][1]) {
@@ -40,6 +43,7 @@ class Snake {
         return false;
     }
 
+    // Verifica si la serpiente colisiona con la otra
     isCollidingWith(otherSnake) {
         for (let i = 0; i < otherSnake.body.length; i++) {
             if (this.body[0][0] === otherSnake.body[i][0] && this.body[0][1] === otherSnake.body[i][1]) {
@@ -49,23 +53,59 @@ class Snake {
         return false;
     }
 
+    // Renderiza el cuerpo de la serpiente como divs en el tablero
     render() {
         return this.body.map(segment => `<div class="head ${this.colorClass}" style="grid-area: ${segment[1]} / ${segment[0]}"></div>`).join("");
     }
 }
 
+//Eventos 
+document.addEventListener("DOMContentLoaded", () => {
+
+    // Movimiento serpientes
+    document.addEventListener("keydown", changeDirection);
+
+    // Evento singleplayer
+    document.querySelector(".singleplayer-button").addEventListener("click", function () {
+
+        startScreen.style.display = "none";
+        wrapper.style.display = "none";
+        gameOverScreen.style.display = "none";
+        fakeScreen.style.display = "flex";
+        music.play();
+    });
+
+    // Evento multiplayer
+    document.querySelector(".multiplayer-button").addEventListener("click", function () {
+        startScreen.style.display = "none";
+        wrapper.style.display = "flex";
+        gameOverScreen.style.display = "none";
+        fakeScreen.style.display = "none";
+    })
+});
+
+// Elementos HTML clave
 const playBoard = document.querySelector(".play-board");
 const scorePlayer1Element = document.querySelector(".score-player1");
 const scorePlayer2Element = document.querySelector(".score-player2");
+const gameOverScreen = document.getElementById("gameover-screen");
+const timerElement = document.querySelector(".timer");
+const snake1 = new Snake(4, 15, "player1");
+const snake2 = new Snake(26, 15, "player2");
+const fakeScreen = document.getElementById("fakescreen");
+const music = document.getElementById("trollmusic");
+const startScreen = document.getElementById("start-screen");
+const wrapper = document.getElementById("wrapper");
+
 
 let gameOver = false;
 let foods = [];  // Lista de comidas
-const snake1 = new Snake(4, 15, "player1");
-const snake2 = new Snake(26, 15, "player2");
 let setIntervalId;
 
 let countdownTime = 120; // Inicializamos el temporizador
-const timerElement = document.querySelector(".timer"); 
+
+
+// GameLoop
 
 const generateFood = () => {
     const foodX = Math.floor(Math.random() * 30) + 1;
@@ -78,8 +118,8 @@ const changeFoodPosition = () => {
     while (foods.length < 3) {
         const newFood = generateFood();
         // Evitar que la comida aparezca donde están las serpientes
-        const isFoodOnSnake = snake1.body.some(segment => segment[0] === newFood.x && segment[1] === newFood.y) || 
-                              snake2.body.some(segment => segment[0] === newFood.x && segment[1] === newFood.y);
+        const isFoodOnSnake = snake1.body.some(segment => segment[0] === newFood.x && segment[1] === newFood.y) ||
+            snake2.body.some(segment => segment[0] === newFood.x && segment[1] === newFood.y);
         if (!isFoodOnSnake) {
             foods.push(newFood);
         }
@@ -92,7 +132,7 @@ const handleGameOver = () => {
     document.getElementById("wrapper").style.display = "none";
     document.getElementById("start-screen").style.display = "none";
 
-    const gameOverScreen = document.getElementById("gameover-screen");
+    
     gameOverScreen.style.display = "flex";
 };
 
@@ -132,7 +172,7 @@ const updateTimer = () => {
         countdownTime--;
         timerElement.innerHTML = `⏱️ ${countdownTime}s`;
     } else {
-        gameOver = true; 
+        gameOver = true;
     }
 };
 
@@ -147,11 +187,11 @@ const initGame = () => {
 
     // Verificar si las serpientes comieron alguna comida y cambiar su posición
     if (snake1.updatePosition(foods)) {
-        changeFoodPosition(); 
+        changeFoodPosition();
     }
 
     if (snake2.updatePosition(foods)) {
-        changeFoodPosition(); 
+        changeFoodPosition();
     }
 
     if (snake1.x <= 0 || snake1.x > 30 || snake1.y <= 0 || snake1.y > 30 || snake2.x <= 0 || snake2.x > 30 || snake2.y <= 0 || snake2.y > 30) {
@@ -180,24 +220,4 @@ setIntervalId = setInterval(initGame, 125);
 
 changeFoodPosition();
 
-document.addEventListener("keydown", changeDirection);
 
-
-// Evento singleplayer
-document.querySelector(".singleplayer-button").addEventListener("click", function() {
-    
-    document.getElementById("start-screen").style.display = "none";
-    document.getElementById("wrapper").style.display = "none";
-    document.getElementById("gameover-screen").style.display = "none";
-
-    
-    const fakeScreen = document.getElementById("fakescreen");
-    fakeScreen.style.display = "flex";
-
-    const music = document.getElementById("trollmusic");
-    music.play();
-});
-
-
-
-// Evento multiplayer
