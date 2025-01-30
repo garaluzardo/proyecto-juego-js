@@ -125,7 +125,7 @@ const initGame = () => {
     htmlMarkup += snake2.render();
 
     playBoard.innerHTML = htmlMarkup;
-    scoreElement.innerHTML = `Player 1 Score: ${snake1.score} | Player 2 Score: ${snake2.score}`;
+    scoreElement.innerHTML = `Player 1: ${snake1.score} | Player 2: ${snake2.score}`;
 };
 
 changeFoodPosition();
