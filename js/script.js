@@ -55,7 +55,8 @@ class Snake {
 }
 
 const playBoard = document.querySelector(".play-board");
-const scoreElement = document.querySelector(".score");
+const scorePlayer1Element = document.querySelector(".score-player1");
+const scorePlayer2Element = document.querySelector(".score-player2");
 
 let gameOver = false;
 let foods = [];  // Lista de comidas
@@ -124,7 +125,7 @@ const changeDirection = (e) => {
 const updateTimer = () => {
     if (countdownTime > 0) {
         countdownTime--;
-        timerElement.innerHTML = `Time: ${countdownTime}s`;
+        timerElement.innerHTML = `⏱️ ${countdownTime}s`;
     } else {
         gameOver = true; 
     }
@@ -160,7 +161,10 @@ const initGame = () => {
     htmlMarkup += snake2.render();
 
     playBoard.innerHTML = htmlMarkup;
-    scoreElement.innerHTML = `Player 1: ${snake1.score} | Player 2: ${snake2.score}`;
+
+    // Actualizar los puntajes por separado
+    scorePlayer1Element.innerHTML = `Player 1: ${snake1.score}`;
+    scorePlayer2Element.innerHTML = `Player 2: ${snake2.score}`;
 };
 
 
