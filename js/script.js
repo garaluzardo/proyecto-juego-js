@@ -60,8 +60,8 @@ const scorePlayer2Element = document.querySelector(".score-player2");
 
 let gameOver = false;
 let foods = [];  // Lista de comidas
-const snake1 = new Snake(5, 10, "player1");
-const snake2 = new Snake(25, 20, "player2");
+const snake1 = new Snake(4, 15, "player1");
+const snake2 = new Snake(26, 15, "player2");
 let setIntervalId;
 
 let countdownTime = 120; // Inicializamos el temporizador
@@ -93,30 +93,30 @@ const handleGameOver = () => {
 };
 
 const changeDirection = (e) => {
-    if (e.key === "ArrowUp" && snake1.velocityY === 0) {
+    if (e.key === "w" && snake1.velocityY === 0) {
         snake1.velocityX = 0;
         snake1.velocityY = -1;
-    } else if (e.key === "ArrowDown" && snake1.velocityY === 0) {
+    } else if (e.key === "s" && snake1.velocityY === 0) {
         snake1.velocityX = 0;
         snake1.velocityY = 1;
-    } else if (e.key === "ArrowLeft" && snake1.velocityX === 0) {
+    } else if (e.key === "a" && snake1.velocityX === 0) {
         snake1.velocityX = -1;
         snake1.velocityY = 0;
-    } else if (e.key === "ArrowRight" && snake1.velocityX === 0) {
+    } else if (e.key === "d" && snake1.velocityX === 0) {
         snake1.velocityX = 1;
         snake1.velocityY = 0;
     }
 
-    if (e.key === "w" && snake2.velocityY === 0) {
+    if (e.key === "ArrowUp" && snake2.velocityY === 0) {
         snake2.velocityX = 0;
         snake2.velocityY = -1;
-    } else if (e.key === "s" && snake2.velocityY === 0) {
+    } else if (e.key === "ArrowDown" && snake2.velocityY === 0) {
         snake2.velocityX = 0;
         snake2.velocityY = 1;
-    } else if (e.key === "a" && snake2.velocityX === 0) {
+    } else if (e.key === "ArrowLeft" && snake2.velocityX === 0) {
         snake2.velocityX = -1;
         snake2.velocityY = 0;
-    } else if (e.key === "d" && snake2.velocityX === 0) {
+    } else if (e.key === "ArrowRight" && snake2.velocityX === 0) {
         snake2.velocityX = 1;
         snake2.velocityY = 0;
     }
