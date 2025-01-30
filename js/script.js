@@ -59,6 +59,9 @@ const snake1 = new Snake(5, 10, "player1");
 const snake2 = new Snake(25, 20, "player2");
 let setIntervalId;
 
+let countdownTime = 120; // Inicializamos el temporizador
+const timerElement = document.querySelector(".timer"); // Seleccionamos el contenedor del temporizador
+
 const changeFoodPosition = () => {
     foodX = Math.floor(Math.random() * 30) + 1;
     foodY = Math.floor(Math.random() * 30) + 1;
@@ -100,6 +103,15 @@ const changeDirection = (e) => {
     }
 };
 
+const updateTimer = () => {
+    if (countdownTime > 0) {
+        countdownTime--;
+        timerElement.innerHTML = `Time: ${countdownTime}s`;
+    } else {
+        gameOver = true; // Termina el juego cuando el tiempo se acaba
+    }
+};
+
 const initGame = () => {
     if (gameOver) return handleGameOver();
 
@@ -128,6 +140,11 @@ const initGame = () => {
     scoreElement.innerHTML = `Player 1: ${snake1.score} | Player 2: ${snake2.score}`;
 };
 
-changeFoodPosition();
-setIntervalId = setInterval(initGame, 200);
+// Iniciar el temporizador con un intervalo separado (cada segundo)
+setInterval(updateTimer, 1000); // Temporizador actualizado cada segundo
+
+// Iniciar el juego con el intervalo original (cada 125 ms para movimiento)
+setIntervalId = setInterval(initGame, 125);
+
 document.addEventListener("keydown", changeDirection);
+
