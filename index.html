@@ -8,7 +8,7 @@
 </head>
 <body>
 
-  <div id="start-screen" class="screen">
+  <div id="start-screen">
     <img class="title" src="/images/title.gif" alt="Título animado de 'Snakes'">
     <div id="menu" class="menu">
       <button class="singleplayer-button"></button>
@@ -17,7 +17,7 @@
   </div>
 
 
-  <div id="wrapper" class="screen">
+  <div id="wrapper">
       <div class="game-details">
         <div class="score-player1">Score: 00</div>
         <div class="score-player2">Score: 00</div>
@@ -27,9 +27,15 @@
       </div>    
     </div>
 
-    <div id="gameover-screen" class="screen">
-      <p></p>
-      <button>RESTART</button>
+    <div id="gameover-screen">
+      <p>GAME OVER!</p>
+      <button class="gameover-button">RESTART</button>
+    </div>
+
+    <div id="fakescreen">
+      <img src="images/directed-by.jpg" alt="Fake screen">
+      <button class="troll-restart">RESTART</button>
+      <audio id="trollmusic" src="music/directed-by-music.mp3"></audio>
     </div>
 
     <script src="js/script.js"></script>

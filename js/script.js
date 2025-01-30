@@ -88,9 +88,14 @@ const changeFoodPosition = () => {
 
 const handleGameOver = () => {
     clearInterval(setIntervalId);
-    alert(`Game Over!\nPlayer 1: ${snake1.score}\nPlayer 2: ${snake2.score}`);
-    location.reload();
+
+    document.getElementById("wrapper").style.display = "none";
+    document.getElementById("start-screen").style.display = "none";
+
+    const gameOverScreen = document.getElementById("gameover-screen");
+    gameOverScreen.style.display = "flex";
 };
+
 
 const changeDirection = (e) => {
     if (e.key === "w" && snake1.velocityY === 0) {
@@ -176,3 +181,23 @@ setIntervalId = setInterval(initGame, 125);
 changeFoodPosition();
 
 document.addEventListener("keydown", changeDirection);
+
+
+// Evento singleplayer
+document.querySelector(".singleplayer-button").addEventListener("click", function() {
+    
+    document.getElementById("start-screen").style.display = "none";
+    document.getElementById("wrapper").style.display = "none";
+    document.getElementById("gameover-screen").style.display = "none";
+
+    
+    const fakeScreen = document.getElementById("fakescreen");
+    fakeScreen.style.display = "flex";
+
+    const music = document.getElementById("trollmusic");
+    music.play();
+});
+
+
+
+// Evento multiplayer
