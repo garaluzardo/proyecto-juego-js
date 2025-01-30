@@ -9,9 +9,14 @@ class Snake {
         this.colorClass = colorClass;
     }
 
-    updatePosition(foodX, foodY) {
-        if (this.x === foodX && this.y === foodY) {
-            this.body.push([foodX, foodY]);
+    updatePosition(foods) {
+        // Verificar si la cabeza de la serpiente ha comido alguna comida
+        const foodIndex = foods.findIndex(food => food.x === this.x && food.y === this.y);
+        
+        if (foodIndex !== -1) {
+            // Si la serpiente ha comido la comida, eliminamos la comida del arreglo
+            foods.splice(foodIndex, 1);
+            this.body.push([this.x, this.y]);
             this.score++;
             return true;
         }
@@ -53,23 +58,36 @@ const playBoard = document.querySelector(".play-board");
 const scoreElement = document.querySelector(".score");
 
 let gameOver = false;
-let foodX = 13, foodY = 10;
-
+let foods = [];  // Lista de comidas
 const snake1 = new Snake(5, 10, "player1");
 const snake2 = new Snake(25, 20, "player2");
 let setIntervalId;
 
 let countdownTime = 120; // Inicializamos el temporizador
-const timerElement = document.querySelector(".timer"); // Seleccionamos el contenedor del temporizador
+const timerElement = document.querySelector(".timer"); 
+
+const generateFood = () => {
+    const foodX = Math.floor(Math.random() * 30) + 1;
+    const foodY = Math.floor(Math.random() * 30) + 1;
+    return { x: foodX, y: foodY };
+};
 
 const changeFoodPosition = () => {
-    foodX = Math.floor(Math.random() * 30) + 1;
-    foodY = Math.floor(Math.random() * 30) + 1;
+    // Siempre habrá 3 piezas de comida
+    while (foods.length < 3) {
+        const newFood = generateFood();
+        // Evitar que la comida aparezca donde están las serpientes
+        const isFoodOnSnake = snake1.body.some(segment => segment[0] === newFood.x && segment[1] === newFood.y) || 
+                              snake2.body.some(segment => segment[0] === newFood.x && segment[1] === newFood.y);
+        if (!isFoodOnSnake) {
+            foods.push(newFood);
+        }
+    }
 };
 
 const handleGameOver = () => {
     clearInterval(setIntervalId);
-    alert(`Game Over!\nPlayer 1 Score: ${snake1.score}\nPlayer 2 Score: ${snake2.score}`);
+    alert(`Game Over!\nPlayer 1: ${snake1.score}\nPlayer 2: ${snake2.score}`);
     location.reload();
 };
 
@@ -108,21 +126,26 @@ const updateTimer = () => {
         countdownTime--;
         timerElement.innerHTML = `Time: ${countdownTime}s`;
     } else {
-        gameOver = true; // Termina el juego cuando el tiempo se acaba
+        gameOver = true; 
     }
 };
 
 const initGame = () => {
     if (gameOver) return handleGameOver();
 
-    let htmlMarkup = `<div class="food" style="grid-area: ${foodY} / ${foodX}"></div>`;
+    let htmlMarkup = "";
 
-    if (snake1.updatePosition(foodX, foodY)) {
-        changeFoodPosition();
+    foods.forEach(food => {
+        htmlMarkup += `<div class="food" style="grid-area: ${food.y} / ${food.x}"></div>`;
+    });
+
+    // Verificar si las serpientes comieron alguna comida y cambiar su posición
+    if (snake1.updatePosition(foods)) {
+        changeFoodPosition(); 
     }
 
-    if (snake2.updatePosition(foodX, foodY)) {
-        changeFoodPosition();
+    if (snake2.updatePosition(foods)) {
+        changeFoodPosition(); 
     }
 
     if (snake1.x <= 0 || snake1.x > 30 || snake1.y <= 0 || snake1.y > 30 || snake2.x <= 0 || snake2.x > 30 || snake2.y <= 0 || snake2.y > 30) {
@@ -140,11 +163,12 @@ const initGame = () => {
     scoreElement.innerHTML = `Player 1: ${snake1.score} | Player 2: ${snake2.score}`;
 };
 
-// Iniciar el temporizador con un intervalo separado (cada segundo)
+
 setInterval(updateTimer, 1000); // Temporizador actualizado cada segundo
 
 // Iniciar el juego con el intervalo original (cada 125 ms para movimiento)
 setIntervalId = setInterval(initGame, 125);
 
-document.addEventListener("keydown", changeDirection);
+changeFoodPosition();
 
+document.addEventListener("keydown", changeDirection);
