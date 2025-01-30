@@ -59,30 +59,10 @@ class Snake {
     }
 }
 
-//Eventos 
-document.addEventListener("DOMContentLoaded", () => {
 
-    // Movimiento serpientes
-    document.addEventListener("keydown", changeDirection);
 
-    // Evento singleplayer
-    document.querySelector(".singleplayer-button").addEventListener("click", function () {
 
-        startScreen.style.display = "none";
-        wrapper.style.display = "none";
-        gameOverScreen.style.display = "none";
-        fakeScreen.style.display = "flex";
-        music.play();
-    });
 
-    // Evento multiplayer
-    document.querySelector(".multiplayer-button").addEventListener("click", function () {
-        startScreen.style.display = "none";
-        wrapper.style.display = "flex";
-        gameOverScreen.style.display = "none";
-        fakeScreen.style.display = "none";
-    })
-});
 
 // Elementos HTML clave
 const playBoard = document.querySelector(".play-board");
@@ -101,8 +81,74 @@ const wrapper = document.getElementById("wrapper");
 let gameOver = false;
 let foods = [];  // Lista de comidas
 let setIntervalId;
-
 let countdownTime = 120; // Inicializamos el temporizador
+
+
+
+
+
+
+
+
+
+//Eventos 
+document.addEventListener("DOMContentLoaded", () => {
+
+    // Inicialmente, solo mostrar #start-screen
+    startScreen.style.display = "block";
+    wrapper.style.display = "none";
+    gameOverScreen.style.display = "none";
+    fakeScreen.style.display = "none";
+
+    // Movimiento serpientes
+    document.addEventListener("keydown", changeDirection);
+
+    // Evento singleplayer
+    document.querySelector(".singleplayer-button").addEventListener("click", function () {
+
+        startScreen.style.display = "none";
+        wrapper.style.display = "none";
+        gameOverScreen.style.display = "none";
+        fakeScreen.style.display = "flex";
+        music.play();
+    });
+
+    // Evento restart desde fakescreen
+    document.querySelector(".troll-restart").addEventListener("click", function () {
+        
+        startScreen.style.display = "flex";
+        wrapper.style.display = "none";
+        gameOverScreen.style.display = "none";
+        fakeScreen.style.display = "none";
+        music.pause();
+        music.currentTime = 0;
+    });
+
+    // Evento multiplayer
+    document.querySelector(".multiplayer-button").addEventListener("click", function () {
+        startScreen.style.display = "none";
+        wrapper.style.display = "flex";
+        gameOverScreen.style.display = "none";
+        fakeScreen.style.display = "none";
+        document.addEventListener("keydown", changeDirection);
+    });
+
+    // Evento restart desde gameover screen
+    document.querySelector(".gameover-button").addEventListener("click", function () {
+        startScreen.style.display = "flex";
+        wrapper.style.display = "none";
+        gameOverScreen.style.display = "none";
+        fakeScreen.style.display = "none";
+    });
+
+});
+
+
+
+
+
+
+
 
 
 // GameLoop
@@ -128,12 +174,12 @@ const changeFoodPosition = () => {
 
 const handleGameOver = () => {
     clearInterval(setIntervalId);
-
-    document.getElementById("wrapper").style.display = "none";
-    document.getElementById("start-screen").style.display = "none";
-
-    
+    startScreen.style.display = "none";
+    wrapper.style.display ="flex";
     gameOverScreen.style.display = "flex";
+    
+    scorePlayer1Element.innerText = `Player 1 score: ${snake1.score}`;
+    scorePlayer2Element.innerText = `Player 2 score: ${snake2.score}`;
 };
 
 
