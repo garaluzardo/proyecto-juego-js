@@ -4,9 +4,16 @@
     <meta charset="UTF-8">
     <title>Snakes</title>
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="icon" href="data:,">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 </head>
 <body>
+
+  <!--música de fondo-->
+  <audio id="background-music" autoplay loop>
+    <source src="music/boing-boing.mp3" type="audio/mp3">
+    Tu navegador no soporta el elemento de audio.
+  </audio>
 
   <div id="start-screen">
     <img class="title" src="/images/title.gif" alt="Título animado de 'Snakes'">
@@ -29,8 +36,8 @@
 
     <div id="gameover-screen">
       <h1>GAME OVER!</h1>
-      <p class="score-player1">Player 1 score: 0</p>
-      <p class="score-player2">Player 2 score: 0</p>
+      <!--<p class="score-player1">Player 1 score: 0</p>
+      <p class="score-player2">Player 2 score: 0</p>  pendiente solucionar por qué no se actializa cuando salta el gameover--> 
       <button class="gameover-button">Volver atrás</button>
     </div>
 

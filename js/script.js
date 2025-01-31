@@ -9,9 +9,8 @@ class Snake {
         this.colorClass = colorClass;
     }
 
-    //Actualiza la posición de la serpiente y comprueba si ha comido
+    // Actualiza la posición de la serpiente y comprueba si ha comido
     updatePosition(foods) {
-
         const foodIndex = foods.findIndex(food => food.x === this.x && food.y === this.y);
 
         if (foodIndex !== -1) {
@@ -59,11 +58,6 @@ class Snake {
     }
 }
 
-
-
-
-
-
 // Elementos HTML clave
 const playBoard = document.querySelector(".play-board");
 const scorePlayer1Element = document.querySelector(".score-player1");
@@ -74,54 +68,52 @@ const snake1 = new Snake(4, 15, "player1");
 const snake2 = new Snake(26, 15, "player2");
 const fakeScreen = document.getElementById("fakescreen");
 const music = document.getElementById("trollmusic");
+const backgroundMusic = document.getElementById("background-music"); // Audio en loop
 const startScreen = document.getElementById("start-screen");
 const wrapper = document.getElementById("wrapper");
-
+const multiplayerButton = document.querySelector(".multiplayer-button");
 
 let gameOver = false;
 let foods = [];  // Lista de comidas
-let setIntervalId;
+let gameLoopIntervalId; // Para el game loop
+let timerIntervalId;    // Para el temporizador
 let countdownTime = 120; // Inicializamos el temporizador
 
-
-
-
-
-
-
-
-
-//Eventos 
+// Eventos 
 document.addEventListener("DOMContentLoaded", () => {
-
     // Inicialmente, solo mostrar #start-screen
     startScreen.style.display = "block";
     wrapper.style.display = "none";
     gameOverScreen.style.display = "none";
     fakeScreen.style.display = "none";
 
+    // Loop musical de fondo
+    backgroundMusic.loop = true; 
+    backgroundMusic.play();
+
     // Movimiento serpientes
     document.addEventListener("keydown", changeDirection);
 
     // Evento singleplayer
     document.querySelector(".singleplayer-button").addEventListener("click", function () {
-
         startScreen.style.display = "none";
         wrapper.style.display = "none";
         gameOverScreen.style.display = "none";
         fakeScreen.style.display = "flex";
         music.play();
+        backgroundMusic.pause();
     });
 
     // Evento restart desde fakescreen
     document.querySelector(".troll-restart").addEventListener("click", function () {
-        
         startScreen.style.display = "flex";
         wrapper.style.display = "none";
         gameOverScreen.style.display = "none";
         fakeScreen.style.display = "none";
         music.pause();
         music.currentTime = 0;
+        backgroundMusic.play();
+        backgroundMusic.currentTime = 0;
     });
 
     // Evento multiplayer
@@ -130,36 +122,45 @@ document.addEventListener("DOMContentLoaded", () => {
         wrapper.style.display = "flex";
         gameOverScreen.style.display = "none";
         fakeScreen.style.display = "none";
+       
+        countdownTime = 120;
+        updateTimer(); 
+
+        // Limpiar intervalos previos
+        if (gameLoopIntervalId) {
+            clearInterval(gameLoopIntervalId);
+        }
+        if (timerIntervalId) {
+            clearInterval(timerIntervalId);
+        }
+
+        // Iniciar los intervalos con identificadores separados
+        gameLoopIntervalId = setInterval(initGame, 125);  // Iniciar el game loop
+        timerIntervalId = setInterval(updateTimer, 1000); // Iniciar el temporizador
+
         document.addEventListener("keydown", changeDirection);
     });
 
     // Evento restart desde gameover screen
     document.querySelector(".gameover-button").addEventListener("click", function () {
+        clearInterval(gameLoopIntervalId);
+        clearInterval(timerIntervalId);
+        resetGame();
         startScreen.style.display = "flex";
         wrapper.style.display = "none";
         gameOverScreen.style.display = "none";
         fakeScreen.style.display = "none";
     });
-
 });
 
-
-
-
-
-
-
-
-
-// GameLoop
-
-const generateFood = () => {
+// GameLoop functions
+function generateFood() {
     const foodX = Math.floor(Math.random() * 30) + 1;
     const foodY = Math.floor(Math.random() * 30) + 1;
     return { x: foodX, y: foodY };
-};
+}
 
-const changeFoodPosition = () => {
+function changeFoodPosition() {
     // Siempre habrá 3 piezas de comida
     while (foods.length < 3) {
         const newFood = generateFood();
@@ -170,20 +171,9 @@ const changeFoodPosition = () => {
             foods.push(newFood);
         }
     }
-};
+}
 
-const handleGameOver = () => {
-    clearInterval(setIntervalId);
-    startScreen.style.display = "none";
-    wrapper.style.display ="flex";
-    gameOverScreen.style.display = "flex";
-    
-    scorePlayer1Element.innerText = `Player 1 score: ${snake1.score}`;
-    scorePlayer2Element.innerText = `Player 2 score: ${snake2.score}`;
-};
-
-
-const changeDirection = (e) => {
+function changeDirection(e) {
     if (e.key === "w" && snake1.velocityY === 0) {
         snake1.velocityX = 0;
         snake1.velocityY = -1;
@@ -211,18 +201,68 @@ const changeDirection = (e) => {
         snake2.velocityX = 1;
         snake2.velocityY = 0;
     }
-};
+}
 
-const updateTimer = () => {
+function updateTimer() {
     if (countdownTime > 0) {
         countdownTime--;
         timerElement.innerHTML = `⏱️ ${countdownTime}s`;
     } else {
         gameOver = true;
+        handleGameOver();
     }
-};
+}
 
-const initGame = () => {
+function handleGameOver() {
+    clearInterval(timerIntervalId); // Detener solo el temporizador
+    startScreen.style.display = "none";
+    wrapper.style.display = "flex";
+    gameOverScreen.style.display = "flex";
+    scorePlayer1Element.innerText = `Player 1 score: ${snake1.score}`;
+    scorePlayer2Element.innerText = `Player 2 score: ${snake2.score}`;
+}
+
+function resetGame() {
+    // Limpiar intervalos anteriores
+    if (gameLoopIntervalId) {
+        clearInterval(gameLoopIntervalId);
+    }
+    if (timerIntervalId) {
+        clearInterval(timerIntervalId);
+    }
+
+    // Reiniciar el estado del juego
+    snake1.x = 4;
+    snake1.y = 15;
+    snake1.body = [];
+    snake1.velocityX = 0;
+    snake1.velocityY = 0;
+    snake1.score = 0;
+
+    snake2.x = 26;
+    snake2.y = 15;
+    snake2.body = [];
+    snake2.velocityX = 0;
+    snake2.velocityY = 0;
+    snake2.score = 0;
+
+    foods = [];
+
+    countdownTime = 120;
+    gameOver = false;
+
+    changeFoodPosition();
+    playBoard.innerHTML = '';
+    scorePlayer1Element.innerText = `Player 1 score: 0`;
+    scorePlayer2Element.innerText = `Player 2 score: 0`;
+
+    // Reiniciar los intervalos
+    gameLoopIntervalId = setInterval(initGame, 125);  // Game loop
+    timerIntervalId = setInterval(updateTimer, 1000); // Temporizador
+}
+
+// GameLoop funciton
+function initGame() {
     if (gameOver) return handleGameOver();
 
     let htmlMarkup = "";
@@ -256,14 +296,9 @@ const initGame = () => {
     // Actualizar los puntajes por separado
     scorePlayer1Element.innerHTML = `Player 1: ${snake1.score}`;
     scorePlayer2Element.innerHTML = `Player 2: ${snake2.score}`;
-};
-
-
-setInterval(updateTimer, 1000); // Temporizador actualizado cada segundo
+}
 
 // Iniciar el juego con el intervalo original (cada 125 ms para movimiento)
-setIntervalId = setInterval(initGame, 125);
+gameLoopIntervalId = setInterval(initGame, 125);
 
 changeFoodPosition();
-
-
