@@ -14,7 +14,7 @@ class Snake {
         const foodIndex = foods.findIndex(food => food.x === this.x && food.y === this.y);
 
         if (foodIndex !== -1) {
-            // Si la serpiente ha comido la comida, eliminamos la comida del arreglo
+            // Si la serpiente ha comido la comida, eliminamos la comida del array
             foods.splice(foodIndex, 1);
             this.body.push([this.x, this.y]);
             this.score++;
@@ -271,7 +271,7 @@ function initGame() {
         htmlMarkup += `<div class="food" style="grid-area: ${food.y} / ${food.x}"></div>`;
     });
 
-    // Verificar si las serpientes comieron alguna comida y cambiar su posición
+    // Verificamos si las serpientes comieron alguna comida y cambiamos su posición
     if (snake1.updatePosition(foods)) {
         changeFoodPosition();
     }
@@ -293,7 +293,7 @@ function initGame() {
 
     playBoard.innerHTML = htmlMarkup;
 
-    // Actualizar los puntajes por separado
+    // Puntos de cada jugador por separado
     scorePlayer1Element.innerHTML = `Player 1: ${snake1.score}`;
     scorePlayer2Element.innerHTML = `Player 2: ${snake2.score}`;
 }
